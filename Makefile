@@ -2,25 +2,23 @@ PRODUCT=cpiostrip
 GOOS=linux
 GOARCH=$(shell uname -m)
 GOARM=
-NAME=$(PRODUCT)-$(GOOS)-$(GOARCH)$(GOARM)
-
 ifeq ($(GOARCH),x86_64)
 	override GOARCH=amd64
 endif
 
-build:
+NAME=$(PRODUCT)-$(GOOS)-$(GOARCH)$(GOARM)
+
+$(NAME):
 	CGO_ENABLED=0 GOOS=$(GOOS) GOARCH=$(GOARCH) go build -a \
 		-ldflags "-w -s" \
 		-trimpath \
 		-o $(NAME)
 
-build-arm: GOARCH=arm
-build-arm: GOARM=5
-build-arm: build
+build: $(NAME)
 
 all:
 	$(MAKE) build
-	$(MAKE) build-arm
+	$(MAKE) GOARCH=arm GOARM=5 build
 
 clean:
 	rm -rfv $(PRODUCT)-* test/
