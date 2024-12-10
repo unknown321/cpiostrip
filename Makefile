@@ -20,7 +20,10 @@ all:
 	$(MAKE) build
 	$(MAKE) GOARCH=arm GOARM=5 build
 
+release: all
+
 clean:
 	rm -rfv $(PRODUCT)-* test/
 
+.PHONY: release all build clean
 .DEFAULT_GOAL := all
